@@ -28,13 +28,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         view = mInflater.inflate(R.layout.cardview_item_book,parent,false);
-        return null;
-
+        return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
+        holder.event_title.setText(mData.get(position).getTitle());
+        holder.img_event_thumbnail.setImageResource(mData.get(position).getThumbnail());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // passing data to the event activity
+                Intent intent = new Intent (mContext,Event_Activity.class);
+                intent.putExtra("Title",mData.get(position).getTitle());
+                intent.putExtra("Category",mData.get(position).getCategory());
+                intent.putExtra("Description",mData.get(position).getDescription());
+                intent.putExtra("Thumbnail",mData.get(position).getThumbnail());
+                // starting the activity
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -44,8 +59,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        TextView event_title;
+        ImageView img_event_thumbnail;
+        CardView cardView;
+
         public MyViewHolder(View itemView) {
             super(itemView);
+
+            event_title = (TextView) itemView.findViewById(R.id.event_title_id);
+            img_event_thumbnail = (ImageView) itemView.findViewById(R.id.event_img_id);
+            cardView = (CardView) itemView.findViewById(R.id.cardView_id);
+
         }
     }
 }
